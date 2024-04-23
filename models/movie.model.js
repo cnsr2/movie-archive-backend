@@ -1,26 +1,11 @@
-const { DataTypes } = require("sequelize");
+const { Schema, model } = require("mongoose");
 
-module.exports = (sequelize) => {
-  const Movie = sequelize.define("movie", {
-    categories: {
-      type: DataTypes.JSON,
-      defaultValue: [],
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    commentıds :{
-      type: DataTypes.JSON,
-      defaultValue: []
-    }
-  });
+const MovieSchema = new Schema({
+  categories: [String],
+  description: String,
+  title: String,
+  commentIds: [Number],
+});
+const MovieModel = model("Movie", MovieSchema);
 
-  return Movie;
-};
+modules.export = MovieModel;

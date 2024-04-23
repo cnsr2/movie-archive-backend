@@ -1,31 +1,33 @@
-const { DataTypes } = require("sequelize");
-const { encryptPassword } = require("../middlewares/JWT");
+const { Schema, model } = require("mongoose");
 
-module.exports = (sequelize) => {
-  const User = sequelize.define("user", {
-    nameSurname: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    friendsUserName :{
-      type: DataTypes.JSON,
-      defaultValue: []
-    }
-  });
+const UserSchema = new Schema({
+  nameSurname: {
+    type: String,
+    maxLength: 100,
+  },
+  password: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  userName: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: true,
+  },
+  email: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: true,
+  },
+  friendsUserName: {
+    type: [String],
+    default: [],
+  },
+});
 
-  return User;
-};
+const UserModel = model("User", UserSchema);
+
+modules.export = UserModel;

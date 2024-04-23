@@ -1,16 +1,9 @@
-const { DataTypes} = require("sequelize");
+const { Schema, model } = require("mongoose");
 
-module.exports = (sequelize) => {
-    const Otp = sequelize.define(
-        "otp",
-        {
-            code:{
-                type:DataTypes.INTEGER,
-            },
-            userId:{
-                type:DataTypes.INTEGER,
-            }
-        }
-    )
-    return Otp;  
-}
+const OtpSchema = new Schema({
+  code: String,
+  userId: String,
+});
+const OtpModel = model("Otp", OtpSchema);
+
+modules.export = OtpModel;

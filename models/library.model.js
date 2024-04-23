@@ -1,17 +1,10 @@
-const { DataTypes } = require("sequelize");
+const { Schema, model } = require("mongoose");
 
-module.exports = (sequelize) => {
-  const Library = sequelize.define("library", {
-    watchedMoviesIds: {
-      type: DataTypes.JSON,
-      defaultValue: []
-    },
-    wantToWatchedMoviesIds: {
-      type: DataTypes.JSON,
-      defaultValue: []
-    },
-  }
-);
+const LibrarySchema = new Schema({
+  userId: Number,
+  watchedMoviesIds: [String],
+  wantToWatchedMoviesIds: [String],
+});
+const LibraryModel = model("Library", LibrarySchema);
 
-  return Library;
-};
+modules.export = LibraryModel;

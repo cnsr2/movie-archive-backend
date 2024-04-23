@@ -1,16 +1,15 @@
-const { DataTypes } = require("sequelize");
+const { Schema, model } = require("mongoose");
 
-module.exports = (sequelize) => {
-  const Comment = sequelize.define("comment", {
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    like: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  });
+const CommentSchema = new Schema({
+  comment: {
+    type: String,
+    required: true,
+  },
+  like: {
+    type: Number,
+    default: 0,
+  },
+});
+const CommentModel = model("Comment", CommentSchema);
 
-  return Comment;
-};
+modules.export = CommentModel;
