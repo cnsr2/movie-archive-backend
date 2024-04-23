@@ -17,5 +17,6 @@ router.post("/forgetPassword", forgetPassword);
 router.get("/getPopularMovies", getPopularMovies);
 router.get("/getRobotSearchMovies", getRobotSearchMovies);
 router.get("/getSearchMovies", getSearchMovies);
+router.get("/x", x);
 
 module.exports = router;
