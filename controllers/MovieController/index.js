@@ -214,9 +214,14 @@ const getRobotSearchMovies = async (req, res) => {
     if (lang !== "tr-TR" && lang !== "en-US") {
       throw new Error("Language is error.");
     }
-    const genreString = genres.join("%2C");
+    let genreString;
 
-    console.log(genreString);
+    if (genres.length === 1) {
+      genreString = genres.join("");
+    } else {
+      genreString = genres.join("%2C");
+    }
+
 
     const url = `https://api.themoviedb.org/3/discover/movie?include_video=false&language=${lang}&page=1&sort_by=popularity.desc&vote_average.gte=${vote}&with_genres=${genreString}&year=-${year}`;
     const options = {
@@ -239,6 +244,7 @@ const getRobotSearchMovies = async (req, res) => {
         })
       )
       .catch((err) => console.error("error:" + err));
+    
 
     res.status(200).json({
       robotMovies,
