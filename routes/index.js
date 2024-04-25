@@ -14,8 +14,8 @@ const {
 router.post("/login", login);
 router.post("/register", register);
 router.post("/forgetPassword", forgetPassword);
-router.get("/getPopularMovies", getPopularMovies);
-router.get("/getRobotSearchMovies", getRobotSearchMovies);
-router.get("/getSearchMovies", getSearchMovies);
+router.post("/getPopularMovies", getPopularMovies);
+router.post("/getRobotSearchMovies", getRobotSearchMovies);
+router.post("/getSearchMovies", getSearchMovies);
 
 module.exports = router;

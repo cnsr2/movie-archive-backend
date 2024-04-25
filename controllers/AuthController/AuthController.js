@@ -1,5 +1,5 @@
 const db = require("../../models");
-const { Op } = require("sequelize");
+// const { Op } = require("sequelize");
 const { generateToken, encryptPassword } = require("../../middlewares/JWT");
 
 const login = async (req, res) => {
