@@ -1,7 +1,9 @@
-const { Mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-// Mongoose.connect(process.env.DATABASE_URL)
-//   .then(() => console.log("Veritabanı ile bağlantı kuruldu"))
-//   .catch((err) => {
-//     console.log("Hata!! veritabanına bağlanırken hata oldu.", err);
-//   });
+mongoose
+  .connect(process.env.DATABASE_URL)
+  .then(() => console.log("Veritabanı ile bağlantı kuruldu"))
+  .catch((err) => {
+    console.log("Hata!! veritabanına bağlanırken hata oldu.", err);
+  });

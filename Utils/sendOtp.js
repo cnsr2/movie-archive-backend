@@ -1,33 +1,33 @@
-const db = require("../models");
+const UserModel = require("../models/user.model");
+const OtpModel = require("../models/otp.model");
 const { sendMail } = require("./Mailer");
 const { encryptPassword } = require("../middlewares/JWT");
 
+// mongoose.connect(process.env.DATABASE_URL);
 const forgetPassword = async (req, res) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
   if (!email) {
     return res.status(404).json({ message: "Email Not Found" });
   }
 
   if (!req.body.code) {
     let code = "";
-    const characters = "0123456789";
-    const charactersLength = characters.length;
-    for (let i = 0; i < 6; i++) {
-      code += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    let user = await db.user.findOne({ where: { email: email } });
+
+    code = Math.random().toString().split("").slice(2, 8).join("");
+
+    let user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ mesage: "Email Not Found" });
     }
-    await db.otp.destroy({ where: { userId: user.id } });
+    await OtpModel.deleteOne({ userId: user.id });
     setTimeout(async () => {
-      let tempOtp = await db.otp.findOne({ where: { userId: user.id } });
+      let tempOtp = await OtpModel.findOne({ userId: user.id });
       if (tempOtp) {
-        await tempOtp.destroy();
+        await tempOtp.deleteOne();
         console.log("OTP expired and deleted.");
       }
     }, 5 * 60 * 1000);
-    await db.otp.create({
+    await OtpModel.create({
       userId: user.id,
       code,
     });
@@ -38,20 +38,16 @@ const forgetPassword = async (req, res) => {
     );
     return res.status(200).json({ message: "Password Sent" });
   }
-  let user = await db.user.findOne({ where: { email: email } });
+  let user = await UserModel.findOne({ email: email });
   if (!user) {
     return res.status(404).json({ mesage: "Email Not Found" });
   }
-  let otp = await db.otp.findOne({
-    where: { userId: user.id, code: req.body.code },
-  });
+  let otp = await OtpModel.findOne({ userId: user.id, code: req.body.code });
   if (otp) {
-    req.body.password = encryptPassword(req.body.password);
-    await db.user.update(
-      { password: req.body.password },
-      { where: { email: email } }
-    );
-    await otp.destroy();
+    let password = encryptPassword(req.body.password);
+    await user.updateOne({ password });
+    await otp.deleteOne();
+
     return res.status(200).json({ message: "Password updated successfully" });
   }
 

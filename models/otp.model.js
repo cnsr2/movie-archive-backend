@@ -6,4 +6,4 @@ const OtpSchema = new Schema({
 });
 const OtpModel = model("Otp", OtpSchema);
 
-modules.export = OtpModel;
+module.exports = OtpModel;

@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const { JWT_SECRET, CRYPTO_SALT } = process.env;
 const crypto = require("crypto");
+
+const UserModel = require("../models/user.model");
 
 const generateToken = (user) => {
   const payload = { user };
@@ -12,13 +15,11 @@ const generateToken = (user) => {
 };
 
 const authToken = async (req, res, next) => {
-  const db = require("../models");
-  const user = db.user;
+  const user = UserModel;
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
   if (token == null) return res.status(401).json({ message: "unautherized" });
-
 
   jwt.verify(token, JWT_SECRET, (err, payload) => {
     if (err)
@@ -26,8 +27,9 @@ const authToken = async (req, res, next) => {
     if ((payload?.user?.id || 0) == 0) {
       return res.status(403).json({ code: 403, message: "unautherized" });
     }
-  
-    user.findByPk(payload.user.id)
+
+    user
+      .findByPk(payload.user.id)
       .then((user) => {
         if (user != null) {
           req.user = user;
