@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
+const movieRouter = require("./routes/movie");
+const userRouter = require("./routes/user");
 
 const app = express();
 
@@ -16,7 +18,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
 
-app.use("/", indexRouter);
+app.use("/api/", indexRouter);
+app.use("/api/movies", movieRouter);
+app.use("/api/user", userRouter);
 
 const server = http.createServer(app);
 

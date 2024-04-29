@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const CategoryModel = require("../../models/category.model");
 
 const getPopularMovies = async (req, res) => {
   // LANG : tr-TR  en-US
@@ -69,167 +70,8 @@ const getTrendMovies = async (req, res) => {
       )
       .catch((err) => console.error("error:" + err));
 
-    console.log(trendMovies);
-    let categories;
-    if (lang === "tr-TR") {
-      categories = [
-        {
-          id: 28,
-          name: "Aksiyon",
-        },
-        {
-          id: 12,
-          name: "Macera",
-        },
-        {
-          id: 16,
-          name: "Animasyon",
-        },
-        {
-          id: 35,
-          name: "Komedi",
-        },
-        {
-          id: 80,
-          name: "Suç",
-        },
-        {
-          id: 99,
-          name: "Belgesel",
-        },
-        {
-          id: 18,
-          name: "Dram",
-        },
-        {
-          id: 10751,
-          name: "Aile",
-        },
-        {
-          id: 14,
-          name: "Fantastik",
-        },
-        {
-          id: 36,
-          name: "Tarih",
-        },
-        {
-          id: 27,
-          name: "Korku",
-        },
-        {
-          id: 10402,
-          name: "Müzik",
-        },
-        {
-          id: 9648,
-          name: "Gizem",
-        },
-        {
-          id: 10749,
-          name: "Romantik",
-        },
-        {
-          id: 878,
-          name: "Bilim-Kurgu",
-        },
-        {
-          id: 10770,
-          name: "TV film",
-        },
-        {
-          id: 53,
-          name: "Gerilim",
-        },
-        {
-          id: 10752,
-          name: "Savaş",
-        },
-        {
-          id: 37,
-          name: "Vahşi Batı",
-        },
-      ];
-    } else {
-      categories = [
-        {
-          id: 28,
-          name: "Action",
-        },
-        {
-          id: 12,
-          name: "Adventure",
-        },
-        {
-          id: 16,
-          name: "Animation",
-        },
-        {
-          id: 35,
-          name: "Comedy",
-        },
-        {
-          id: 80,
-          name: "Crime",
-        },
-        {
-          id: 99,
-          name: "Documentary",
-        },
-        {
-          id: 18,
-          name: "Drama",
-        },
-        {
-          id: 10751,
-          name: "Family",
-        },
-        {
-          id: 14,
-          name: "Fantasy",
-        },
-        {
-          id: 36,
-          name: "History",
-        },
-        {
-          id: 27,
-          name: "Horror",
-        },
-        {
-          id: 10402,
-          name: "Music",
-        },
-        {
-          id: 9648,
-          name: "Mystery",
-        },
-        {
-          id: 10749,
-          name: "Romance",
-        },
-        {
-          id: 878,
-          name: "Science Fiction",
-        },
-        {
-          id: 10770,
-          name: "TV Movie",
-        },
-        {
-          id: 53,
-          name: "Thriller",
-        },
-        {
-          id: 10752,
-          name: "War",
-        },
-        {
-          id: 37,
-          name: "Western",
-        },
-      ];
-    }
+    const result = await CategoryModel.findOne({ lang });
+    const categories = result.data;
 
     res.status(200).json({
       trendMovies,
@@ -346,14 +188,26 @@ const getMovieDetailById = async (req, res) => {
       },
     };
 
-    const movieDetail = await fetch(url, options)
+    const movieDetails = await fetch(url, options)
       .then((res) => res.json())
-      //TODO: filtreleme yapılacak.
-      .then((json) => json)
+      .then((json) => {
+        return {
+          id: json.id,
+          adult: json.adult,
+          image: `https://image.tmdb.org/t/p/w500${json.poster_path}`,
+          genres: json.genres,
+          imdb: json.vote_average,
+          overview: json.overview,
+          original_title: json.original_title,
+          release_date: json.release_date,
+          runtime: json.runtime,
+        }
+      }
+      )
       .catch((err) => console.error("error:" + err));
 
     res.status(200).json({
-      movieDetail,
+      movieDetails,
     });
   } catch (error) {
     res.status(400).json({

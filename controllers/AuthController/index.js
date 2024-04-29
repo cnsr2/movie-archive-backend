@@ -33,33 +33,6 @@ const login = async (req, res) => {
   }
 };
 
-// const register = async (req, res) => {
-//   try {
-//     const { email, userName, password } = req.body;
-//     const existingUser = await UserModel.findOne({ where: { userName } });
-
-//     if (existingUser) {
-//       if (existingUser.email === email) {
-//         return res.status(400).json({ message: "Email already exists" });
-//       } else {
-//         return res.status(400).json({ message: "Username already exists" });
-//       }
-//     }
-//     hashedPassword = await encryptPassword(password);
-//     req.body.password = hashedPassword;
-
-//     const newUser = new UserModel(req.body);
-//     newUser.save();
-//     // let tempUser = await UserModel.save(req.body);
-
-//     return res.status(200).json({ newUser });
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ message: "An error occurred", error: error.message });
-//   }
-// };
-
 const register = async (req, res) => {
   try {
     const { email, userName, password } = req.body;
