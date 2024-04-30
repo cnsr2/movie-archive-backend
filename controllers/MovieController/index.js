@@ -207,11 +207,10 @@ const getMovieDetailById = async (req, res) => {
       )
       .catch((err) => console.error("error:" + err));
 
-    const movieComment = await MovieModel.findOne({ id })
+
 
     res.status(200).json({
-      movieDetails,
-      movieComment
+      movieDetails
     });
   } catch (error) {
     res.status(400).json({

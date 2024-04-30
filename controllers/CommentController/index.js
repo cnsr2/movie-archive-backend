@@ -20,15 +20,16 @@ const addComment = async (req, res) => {
                 like: 0,
             })
             await searchMovie.save();
-        }
-
-        if (like) {
-            searchMovie.like += 1;
+        } else {
+            if (like) {
+                searchMovie.like += 1;
+                await searchMovie.save();
+            }
+            searchMovie.commentIds.push(newComment.id);
             await searchMovie.save();
         }
-        searchMovie.commentIds.push(newComment.id);
-        await searchMovie.save();
-        return res.status(200).json({ searchMovie, newComment })
+
+        return res.status(200).json({ newComment })
     } catch (error) {
         res.status(400).json({
             message: "An error occurred while retrieving data",
@@ -55,7 +56,7 @@ const getCommentsByMovieId = async (req, res) => {
             }
         }
 
-        return res.status(200).json({ comments });
+        return res.status(200).json({ movie, comments });
     } catch (error) {
         return res.status(500).json({ message: 'An error occurred', error: error.message });
     }
