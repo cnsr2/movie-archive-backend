@@ -19,29 +19,37 @@ const authToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) return res.status(401).json({ message: "unautherized" });
+  if (token == null) return res.status(401).json({ message: "unauthorized" });
 
   jwt.verify(token, JWT_SECRET, (err, payload) => {
-    if (err)
-      return res.status(403).json({ code: 403, message: "unautherized" });
-    if ((payload?.user?.id || 0) == 0) {
-      return res.status(403).json({ code: 403, message: "unautherized" });
+    if (err) {
+      return res.status(403).json({ code: 403, message: "unauthorized" });
     }
-
-    user
-      .findByPk(payload.user.id)
-      .then((user) => {
-        if (user != null) {
-          req.user = user;
-          next();
-        } else {
+    if (payload?.user?._id) {
+      let userId;
+      if (typeof payload.user._id === 'number' || typeof payload.user._id === 'string') {
+        userId = payload.user._id;
+      } else {
+        userId = mongoose.Types.ObjectId(payload.user._id);
+      }
+      user
+        .findById(userId)
+        .then((user) => {
+          if (user != null) {
+            req.user = user;
+            next();
+          } else {
+            return res.status(403).json({ code: 403, message: "unauthorized" });
+          }
+        })
+        .catch((err) => {
           return res.status(403).json({ code: 403, message: "unauthorized" });
-        }
-      })
-      .catch((err) => {
-        return res.status(403).json({ code: 403, message: "unauthorized" });
-      });
+        });
+    } else {
+      return res.status(403).json({ code: 403, message: "unauthorized" });
+    }
   });
+
 };
 
 const encryptPassword = (password) => {
