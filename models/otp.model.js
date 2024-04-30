@@ -1,8 +1,12 @@
 const { Schema, model } = require("mongoose");
 
 const OtpSchema = new Schema({
-  code: String,
-  userId: String,
+  code: {
+    type: String
+  },
+  userId: {
+    type: String
+  },
 });
 const OtpModel = model("Otp", OtpSchema);
 

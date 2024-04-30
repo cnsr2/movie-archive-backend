@@ -1,15 +1,15 @@
 const { Schema, model } = require("mongoose");
 
 const CommentSchema = new Schema({
-  comment: {
+  description: {
     type: String,
-    required: true,
+    required: true
   },
-  like: {
-    type: Number,
-    default: 0,
-  },
+  userName: {
+    type: String,
+    required: true
+  }
 });
 const CommentModel = model("Comment", CommentSchema);
 
-modules.export = CommentModel;
+module.exports = CommentModel;

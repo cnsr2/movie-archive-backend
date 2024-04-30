@@ -5,6 +5,12 @@ const { generateToken, encryptPassword } = require("../../middlewares/JWT");
 const login = async (req, res) => {
   try {
     const { email, userName, password } = req.body;
+    if (!password) {
+      return res.status(400).json({ message: "Password are required" });
+    }
+    if (!email && !userName) {
+      return res.status(400).json({ message: "Email or Username are required" });
+    }
     let user;
     if (email) {
       user = await UserModel.findOne({ email });
@@ -35,8 +41,18 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   try {
-    const { email, userName, password } = req.body;
-    const existingUser = await UserModel.findOne({ userName });
+    const { email, userName, password, repassword } = req.body;
+    if (!email || !userName || !password || !repassword) {
+      return res.status(400).json({ message: "Email, Username, and password are required" });
+    }
+    if (password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long" });
+    }
+    if (password !== repassword) {
+      return res.status(400).json({ message: "Password Doesn't Match" });
+    }
+
+    const existingUser = await UserModel.findOne({ $or: [{ userName }, { email }] });
 
     if (existingUser) {
       if (existingUser.email === email) {

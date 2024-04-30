@@ -1,10 +1,16 @@
 const { Schema, model } = require("mongoose");
 
 const LibrarySchema = new Schema({
-  userId: Number,
-  watchedMoviesIds: [String],
-  wantToWatchedMoviesIds: [String],
+  userId: {
+    type: Number
+  },
+  watchedMoviesIds: {
+    type: [String]
+  },
+  wantToWatchedMoviesIds: {
+    type: [String]
+  }
 });
 const LibraryModel = model("Library", LibrarySchema);
 
-modules.export = LibraryModel;
+module.exports = LibraryModel;

@@ -9,6 +9,7 @@ require("dotenv").config();
 const indexRouter = require("./routes/index");
 const movieRouter = require("./routes/movie");
 const userRouter = require("./routes/user");
+const commentRouter = require("./routes/comment");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use("/api/", indexRouter);
 app.use("/api/movies", movieRouter);
 app.use("/api/user", userRouter);
+app.use("/api/comment", commentRouter)
 
 const server = http.createServer(app);
 

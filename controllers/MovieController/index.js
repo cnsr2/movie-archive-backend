@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const CategoryModel = require("../../models/category.model");
+const MovieModel = require("../../models/movie.model");
 
 const getPopularMovies = async (req, res) => {
   // LANG : tr-TR  en-US
@@ -206,21 +207,26 @@ const getMovieDetailById = async (req, res) => {
       )
       .catch((err) => console.error("error:" + err));
 
+    const movieComment = await MovieModel.findOne({ id })
+
     res.status(200).json({
       movieDetails,
+      movieComment
     });
   } catch (error) {
     res.status(400).json({
-      message: "Veriler alınırken bir hata oluştu",
+      message: "An error occurred while retrieving data",
       error: error.message,
     });
   }
 };
+
+
 
 module.exports = {
   getPopularMovies,
   getRobotSearchMovies,
   getSearchMovies,
   getTrendMovies,
-  getMovieDetailById,
+  getMovieDetailById
 };
