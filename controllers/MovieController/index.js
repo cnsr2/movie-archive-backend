@@ -100,7 +100,7 @@ const getRobotSearchMovies = async (req, res) => {
       genreString = genres.join("%2C");
     }
 
-    const url = `https://api.themoviedb.org/3/discover/movie?include_video=false&language=${lang}&page=1&sort_by=popularity.desc&vote_average.gte=${vote}&with_genres=${genreString}&year=-${year}`;
+    const url = `https://api.themoviedb.org/3/discover/movie?include_video=false&language=${lang}&page=1&sort_by=popularity.desc&vote_average.gte=${vote}&with_genres=${genreString}&year=+${year}`;
     const options = {
       method: "GET",
       headers: {
